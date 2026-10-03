@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Check VRChat links, see instance details, and copy invites. Runs in your browser.">
+  <meta name="color-scheme" content="dark">
+  <title>vrc-link-tools</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23090909'/%3E%3Cpath d='M8 10l8 12 8-12' fill='none' stroke='white' stroke-width='3'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+  <script src="parser.js" defer></script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>vrc-link-tools<span aria-hidden="true">.</span></h1>
+      <button id="clear" type="button" hidden>clear</button>
+    </header>
+
+    <label for="link">VRChat link</label>
+    <textarea id="link" rows="3" placeholder="paste a world or instance link" spellcheck="false" autocapitalize="off" autocomplete="off" aria-describedby="error"></textarea>
+    <p id="error" role="status" hidden></p>
+
+    <details id="builder">
+      <summary>build a link from IDs</summary>
+      <form id="build-form">
+        <label for="build-world">world ID or world link</label>
+        <input id="build-world" type="text" placeholder="wrld_…" required spellcheck="false">
+
+        <label for="build-instance">existing instance ID <span class="optional">optional</span></label>
+        <input id="build-instance" type="text" placeholder="12345~region(eu)" spellcheck="false">
+
+        <button type="submit">build link</button>
+        <p id="build-error" class="note" role="status" hidden></p>
+      </form>
+    </details>
+
+    <section id="results" aria-label="Parsed link" hidden>
+      <div id="instance-summary">
+        <dl class="metadata">
+          <div>
+            <dt>access</dt>
+            <dd id="access"></dd>
+          </div>
+          <div>
+            <dt>region</dt>
+            <dd id="region"></dd>
+          </div>
+          <div>
+            <dt>instance</dt>
+            <dd id="number"></dd>
+          </div>
+        </dl>
+        <p id="flags" class="note" hidden></p>
+        <div id="owner-row" class="owner-row" hidden>
+          <span id="owner-label"></span>
+          <a id="owner" target="_blank" rel="noopener noreferrer"></a>
+        </div>
+        <p class="note">Read from the link. VRChat checks whether you can join.</p>
+      </div>
+
+      <div class="result">
+        <div>
+          <h2>world id</h2>
+          <code id="world"></code>
+        </div>
+        <button type="button" data-copy="world" aria-label="Copy world ID">copy</button>
+      </div>
+      <div class="result">
+        <div>
+          <h2>instance id</h2>
+          <code id="instance"></code>
+        </div>
+        <button type="button" data-copy="instance" aria-label="Copy instance ID">copy</button>
+      </div>
+
+      <div class="actions">
+        <a id="open" class="primary" href="#">open in VRChat</a>
+        <button type="button" data-copy="launch">copy launch link</button>
+      </div>
+      <div class="links">
+        <a id="web" target="_blank" rel="noopener noreferrer">open on website</a>
+        <a id="world-page" target="_blank" rel="noopener noreferrer">world / create instance</a>
+        <button type="button" data-copy="discord">copy Discord invite</button>
+      </div>
+      <p id="invite-note" class="note" hidden>This link has an invite code. Use the web link when sharing it.</p>
+
+      <details id="formats">
+        <summary>more formats</summary>
+        <div class="format">
+          <label for="desktop-value">desktop launch link</label>
+          <textarea id="desktop-value" rows="2" readonly></textarea>
+          <button type="button" data-copy="desktop">copy</button>
+        </div>
+        <div class="format">
+          <label for="steam-value">Steam launch argument</label>
+          <textarea id="steam-value" rows="2" readonly></textarea>
+          <button type="button" data-copy="steam">copy</button>
+        </div>
+        <div class="format">
+          <label for="full-value">world:instance</label>
+          <textarea id="full-value" rows="2" readonly></textarea>
+          <button type="button" data-copy="full">copy</button>
+        </div>
+        <button id="export" type="button">download JSON</button>
+      </details>
+    </section>
+
+    <footer>
+      <span>by <a href="https://github.com/0Chessz0" target="_blank" rel="noopener noreferrer">Ches</a></span>
+    </footer>
+    <p id="feedback" class="sr-only" role="status"></p>
+    <noscript><p>Enable JavaScript to parse links.</p></noscript>
+  </main>
+</body>
+</html>
